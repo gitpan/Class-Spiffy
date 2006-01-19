@@ -1,4 +1,10 @@
 ---
+version: 0.12
+date:    Thu Jan 19 08:12:40 PST 2006
+changes:
+- Squelch redefine warnings
+
+---
 version: 0.11
 date:    Thu Jan 19 07:42:49 PST 2006
 changes:
