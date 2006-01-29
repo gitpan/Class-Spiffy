@@ -4,7 +4,7 @@ use 5.006001;
 use warnings;
 use Carp;
 require Exporter;
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 our @EXPORT = ();
 our @EXPORT_BASE = qw(field const stub super);
 our @EXPORT_OK = (@EXPORT_BASE, qw(id WWW XXX YYY ZZZ));
@@ -130,28 +130,28 @@ sub all_my_bases {
     $bases_map->{$class} = [grep {not $used->{$_}++} @bases];
 }
 
-my %code = ( 
-    sub_start => 
-      "sub {\n  my \$self = shift;\n",
-    set_default => 
-      "  \$self->{%s} = %s\n    unless exists \$self->{%s};\n",
+my %code = (
+    sub_start =>
+      "sub {\n",
+    set_default =>
+      "  \$_[0]->{%s} = %s\n    unless exists \$_[0]->{%s};\n",
     init =>
-      "  return \$self->{%s} = do { %s }\n" .
-      "    unless \@_ or defined \$self->{%s};\n",
+      "  return \$_[0]->{%s} = do { my \$self = \$_[0]; %s }\n" .
+      "    unless \$#_ > 0 or defined \$_[0]->{%s};\n",
     weak_init =>
       "  return do {\n" .
-      "    \$self->{%s} = do { %s };\n" .
-      "    Scalar::Util::weaken(\$self->{%s}) if ref \$self->{%s};\n" .
-      "    \$self->{%s};\n" .
-      "  } unless \@_ or defined \$self->{%s};\n",
-    return_if_get => 
-      "  return \$self->{%s} unless \@_;\n",
-    set => 
-      "  \$self->{%s} = shift;\n",
-    weaken => 
-      "  Scalar::Util::weaken(\$self->{%s}) if ref \$self->{%s};\n",
-    sub_end => 
-      "  return \$self->{%s};\n}\n",
+      "    \$_[0]->{%s} = do { my \$self = \$_[0]; %s };\n" .
+      "    Scalar::Util::weaken(\$_[0]->{%s}) if ref \$_[0]->{%s};\n" .
+      "    \$_[0]->{%s};\n" .
+      "  } unless \$#_ > 0 or defined \$_[0]->{%s};\n",
+    return_if_get =>
+      "  return \$_[0]->{%s} unless \$#_ > 0;\n",
+    set =>
+      "  \$_[0]->{%s} = \$_[1];\n",
+    weaken =>
+      "  Scalar::Util::weaken(\$_[0]->{%s}) if ref \$_[0]->{%s};\n",
+    sub_end =>
+      "  return \$_[0]->{%s};\n}\n",
 );
 
 sub field {
@@ -493,7 +493,7 @@ __END__
 
 =head1 NAME
 
-Class::Spiffy - Spiffy Perl Interface Framework For You
+Class::Spiffy - Spiffy Framework with No Source Filtering
 
 =head1 SYNOPSIS
 
@@ -940,7 +940,6 @@ Ingy döt Net <ingy@cpan.org>
 =head1 COPYRIGHT
 
 Copyright (c) 2006. Ingy döt Net. All rights reserved.
-Copyright (c) 2004. Brian Ingerson. All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

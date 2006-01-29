@@ -1,4 +1,11 @@
 ---
+version: 0.13
+date:    Sun Jan 29 12:24:59 PST 2006
+changes:
+- Use faster runtime code in `field`.
+- Added Class::Spiffy::mixin.pm to stop Apache::Reload warnings
+
+---
 version: 0.12
 date:    Thu Jan 19 08:12:40 PST 2006
 changes:
