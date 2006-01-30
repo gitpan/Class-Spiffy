@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Foo;
-use Spiffy -Base;
+use Class::Spiffy -base;
 my $test1 = field test1 => [];
 my $test2 = field test2 => {};
 my $test3 = field test3 => [1..4];
