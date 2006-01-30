@@ -3,17 +3,22 @@ NAME
 
 SYNOPSIS
         package Keen;
+        use strict;
+        use warnings;
         use Class::Spiffy -base;
         field 'mirth';
         const mood => ':-)';
     
         sub happy {
+            my $self = shift;
             if ($self->mood eq ':-(') {
                 $self->mirth(-1);
                 print "Cheer up!";
             }
             super;
         }
+
+        1;
 
 DESCRIPTION
     "Class::Spiffy" is a framework and methodology for doing object oriented
@@ -91,6 +96,7 @@ DESCRIPTION
     function with Class::Spiffy:
 
         sub cleanup {
+            my $self = shift;
             $self->scrub;
             super;
         }
@@ -139,7 +145,6 @@ Spiffy EXPORTING
 
         package Bicycle;
         use Vehicle -base, '!field';
-        $self->inflate(tire);
 
     In this case, "Bicycle-"isa('Vehicle')> and also all the things that
     "Vehicle" and "Class::Spiffy" export, will go into "Bicycle", except
@@ -255,6 +260,7 @@ Spiffy FUNCTIONS
             field bar => [];
 
             sub lalala {
+                my $self == shift;
                 $self->foo(42);
                 push @{$self->{bar}}, $self->foo;
             }
@@ -287,12 +293,13 @@ Spiffy FUNCTIONS
         works like you'd expect.
 
             sub foo {
+                my $self = shift;
                 super;             # Same as $self->SUPER::foo(@_);
                 super('hello');    # Same as $self->SUPER::foo('hello');
                 $self->bar(42);
             }
 
-            sub new() {
+            sub new {
                 my $self = super;
                 $self->init;
                 return $self;

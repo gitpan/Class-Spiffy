@@ -4,7 +4,7 @@ use 5.006001;
 use warnings;
 use Carp;
 require Exporter;
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 our @EXPORT = ();
 our @EXPORT_BASE = qw(field const stub super);
 our @EXPORT_OK = (@EXPORT_BASE, qw(id WWW XXX YYY ZZZ));
@@ -498,17 +498,22 @@ Class::Spiffy - Spiffy Framework with No Source Filtering
 =head1 SYNOPSIS
 
     package Keen;
+    use strict;
+    use warnings;
     use Class::Spiffy -base;
     field 'mirth';
     const mood => ':-)';
     
     sub happy {
+        my $self = shift;
         if ($self->mood eq ':-(') {
             $self->mirth(-1);
             print "Cheer up!";
         }
         super;
     }
+
+    1;
 
 =head1 DESCRIPTION
 
@@ -586,6 +591,7 @@ because it automatically passes them on for you. Here's the same
 function with Class::Spiffy:
 
     sub cleanup {
+        my $self = shift;
         $self->scrub;
         super;
     }
@@ -636,7 +642,6 @@ comprise the export specification.
 
     package Bicycle;
     use Vehicle -base, '!field';
-    $self->inflate(tire);
 
 In this case, C<Bicycle->isa('Vehicle')> and also all the things
 that C<Vehicle> and C<Class::Spiffy> export, will go into C<Bicycle>,
@@ -758,6 +763,7 @@ Defines accessor methods for a field of your class:
     field bar => [];
 
     sub lalala {
+        my $self == shift;
         $self->foo(42);
         push @{$self->{bar}}, $self->foo;
     }
@@ -793,12 +799,13 @@ arguments with C<$self> in the front. In other words, it just works
 like you'd expect.
 
     sub foo {
+        my $self = shift;
         super;             # Same as $self->SUPER::foo(@_);
         super('hello');    # Same as $self->SUPER::foo('hello');
         $self->bar(42);
     }
 
-    sub new() {
+    sub new {
         my $self = super;
         $self->init;
         return $self;

@@ -1,4 +1,10 @@
 ---
+version: 0.15
+date:    Mon Jan 30 08:38:32 PST 2006
+changes:
+- Make examples not show affects of source filtering. draven++
+
+---
 version: 0.14
 date:    Sun Jan 29 23:50:19 PST 2006
 changes:
